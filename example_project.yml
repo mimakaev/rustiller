@@ -1,0 +1,38 @@
+input:
+    raw_reads_paths:
+        libA:
+            lane1:
+                - sra:SRR18396988?start=1&end=6000000
+            lane2:
+                - sra:SRR18396988?start=6000001&end=12000000
+        libB:
+            lane1:
+                - sra:SRR18397025
+    library_groups:
+        G:
+            - libA
+            - libB
+    genome:
+        assembly_name: 'mm10'
+        bwa_mem3_index_path: '/path/to/bwa-mem3-index/mm10.fa'    # prefix of `bwa-mem3 index` output
+        chrom_sizes_path: '/path/to/mm10.chrom.sizes.reduced'
+map:
+    chunksize: 0
+    mapping_options: '-c 1'
+parse:
+    parsing_options: '--add-columns mapq --walks-policy all'
+dedup:
+    max_mismatch_bp: 1
+bin:
+    resolutions: [1000, 2000, 10000, 100000, 1000000]
+    balance: true
+    filters:
+        no_filter: ''
+        mapq_30: '(mapq1>=30) and (mapq2>=30)'
+# optional: tools that are not on PATH
+# rustiller:
+#     tools:
+#         rooler: '/path/to/rooler'
+#         bwa-mem3: '/path/to/bwa-mem3'
+#         fastq-dump: '/path/to/fastq-dump'
+#         vdb-dump: '/path/to/vdb-dump'
